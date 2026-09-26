@@ -127,7 +127,7 @@
         Update
       </div>
       <div class="flex-1 overflow-hidden flex items-center relative" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
-        <div class="whitespace-nowrap animate-marquee pl-[100%] text-slate-600 font-semibold text-xs sm:text-sm flex items-center tracking-wide">
+        <div class="whitespace-nowrap animate-marquee pl-[100%] text-slate-600 font-semibold text-xs sm:text-sm flex items-center tracking-wide" id="flash-news">
           Welcome to SORVEX MAIL! Premium digital assets available now. <span class="text-indigo-400 mx-3">&#9679;</span> Instant automated delivery! <span class="text-indigo-400 mx-3">&#9679;</span> 24/7 Support.
         </div>
       </div>
@@ -158,9 +158,134 @@
 
   </main>
 
-  <script>
-    // ---- Data ----
-    var categories = [
+  <!-- Floating Admin button -->
+  <button id="admin-open" title="Admin Panel"
+    class="fixed bottom-5 right-5 z-[90] w-12 h-12 rounded-full bg-slate-900 hover:bg-indigo-600 text-white shadow-lg hover:shadow-indigo-500/40 flex items-center justify-center transition-all active:scale-95">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+  </button>
+
+  <!-- =========================== ADMIN OVERLAY =========================== -->
+  <div id="admin-overlay" class="hidden fixed inset-0 z-[200] bg-slate-900/60 backdrop-blur-sm overflow-y-auto p-3 sm:p-6">
+    <div class="max-w-4xl mx-auto bg-slate-50 rounded-3xl shadow-2xl border border-white/60 overflow-hidden">
+
+      <!-- Admin header -->
+      <div class="flex items-center justify-between px-5 sm:px-7 py-4 bg-white border-b border-slate-200">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-black heading-font shadow">S</span>
+          <div>
+            <h3 class="heading-font font-black text-slate-900 leading-tight">Admin Panel</h3>
+            <p class="text-[11px] text-slate-400 font-semibold" id="admin-status">Not signed in</p>
+          </div>
+        </div>
+        <button id="admin-close" class="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Config warning -->
+      <div id="config-warning" class="hidden m-5 sm:m-7 mb-0 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold leading-relaxed">
+        Firebase config এখনো যোগ করা হয়নি। index.html-এর একদম নিচে <code class="bg-amber-100 px-1 rounded">firebaseConfig</code> object-এ তোমার Firebase project-এর config paste করো। ততক্ষণ storefront demo data দিয়ে চলবে এবং admin edit disabled থাকবে।
+      </div>
+
+      <!-- LOGIN VIEW -->
+      <div id="admin-login" class="p-5 sm:p-7">
+        <form id="login-form" class="max-w-sm mx-auto space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1.5">Email</label>
+            <input type="email" id="login-email" required class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-400" placeholder="admin@example.com" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1.5">Password</label>
+            <input type="password" id="login-password" required class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-400" placeholder="••••••••" />
+          </div>
+          <p id="login-error" class="hidden text-xs font-semibold text-rose-500"></p>
+          <button type="submit" class="w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold py-3 rounded-xl transition-colors active:scale-[0.99]">Sign In</button>
+        </form>
+      </div>
+
+      <!-- DASHBOARD VIEW -->
+      <div id="admin-dashboard" class="hidden p-5 sm:p-7 space-y-6">
+
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <button id="seed-btn" class="text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-100 px-3 py-2 rounded-full transition-colors">Import demo products</button>
+          </div>
+          <button id="logout-btn" class="text-xs font-bold text-rose-500 hover:text-rose-600 px-3 py-2 transition-colors">Sign Out</button>
+        </div>
+
+        <!-- Product form -->
+        <form id="product-form" class="bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="heading-font font-black text-slate-900" id="form-title">Add New Product</h4>
+            <button type="button" id="form-reset" class="hidden text-xs font-bold text-slate-400 hover:text-slate-600">Cancel edit</button>
+          </div>
+          <input type="hidden" id="p-id" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Product Name</label>
+              <input type="text" id="p-name" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40" />
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Category</label>
+              <select id="p-cat" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"></select>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Description</label>
+              <textarea id="p-desc" rows="2" class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Price (USDT)</label>
+              <input type="number" step="0.01" min="0" id="p-usdt" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Price (BDT)</label>
+              <input type="number" step="1" min="0" id="p-bdt" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">Stock</label>
+              <input type="number" step="1" min="0" id="p-stock" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40" />
+            </div>
+          </div>
+          <button type="submit" id="form-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-colors active:scale-[0.99]">Save Product</button>
+        </form>
+
+        <!-- Product list -->
+        <div>
+          <h4 class="heading-font font-black text-slate-900 mb-3">All Products (<span id="admin-count">0</span>)</h4>
+          <div id="admin-product-list" class="space-y-2"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================== APP LOGIC =========================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc,
+      doc, getDocs, writeBatch
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import {
+      getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    /* ============================================================
+       🔥 STEP 1: এখানে তোমার Firebase project-এর config paste করো।
+       Firebase Console > Project settings > Your apps > SDK setup.
+       ============================================================ */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDweHVCuxeRVmfrl9EDmdgMeYURYc8qShY",
+      authDomain: "fg-shop-850a4.firebaseapp.com",
+      projectId: "fg-shop-850a4",
+      storageBucket: "fg-shop-850a4.firebasestorage.app",
+      messagingSenderId: "817663444891",
+      appId: "1:817663444891:web:598378c52c2c28e75c433e",
+      measurementId: "G-YB4QSW14YC"
+    };
+
+    // ---- Seed data (demo fallback + "Import demo products") ----
+    const categories = [
       { id: "cat-29", title: "Microsoft Hotmail & Outlook", badge: "POPULAR", icon: "M" },
       { id: "cat-46", title: "Outlook Domain / Different Type Domain", badge: null, icon: "O" },
       { id: "cat-43", title: "VPN Of Different Type", badge: null, icon: "V" },
@@ -171,86 +296,108 @@
       { id: "cat-52", title: "Edu Mail Of 15 And 30 Days", badge: null, icon: "E" }
     ];
 
-    var products = [
-      { id: 1, cat: "cat-29", name: "Hotmail Fresh Account", desc: "Freshly created, verified Hotmail account.", usdt: 0.35, bdt: 40, stock: 1240 },
-      { id: 2, cat: "cat-29", name: "Outlook Aged Account", desc: "Aged Outlook account with high trust score.", usdt: 0.8, bdt: 92, stock: 560 },
-      { id: 3, cat: "cat-46", name: "Custom Domain Outlook", desc: "Outlook on your own custom domain.", usdt: 1.5, bdt: 172, stock: 210 },
-      { id: 4, cat: "cat-43", name: "Premium VPN - 1 Month", desc: "High speed VPN, multiple locations.", usdt: 2.5, bdt: 285, stock: 430 },
-      { id: 5, cat: "cat-48", name: "Residential Proxy 1 GB", desc: "Rotating residential proxy, 1 GB data.", usdt: 1.2, bdt: 138, stock: 890 },
-      { id: 6, cat: "cat-48", name: "Residential Proxy 10 GB", desc: "Rotating residential proxy, 10 GB data.", usdt: 9.5, bdt: 1090, stock: 320 },
-      { id: 7, cat: "cat-49", name: "Gmail Edu Mail 0-1 Days", desc: "Fresh edu Gmail, 0-1 days old.", usdt: 3.0, bdt: 345, stock: 150 },
-      { id: 8, cat: "cat-50", name: "Gmail Edu Mail 1 Day", desc: "Edu Gmail, exactly 1 day aged.", usdt: 3.2, bdt: 368, stock: 120 },
-      { id: 9, cat: "cat-51", name: "Edu Mail 3-7 Days", desc: "Edu mail aged 3 to 7 days.", usdt: 4.5, bdt: 517, stock: 80 },
-      { id: 10, cat: "cat-52", name: "Edu Mail 15-30 Days", desc: "Premium aged edu mail, 15-30 days.", usdt: 7.0, bdt: 805, stock: 45 }
+    const seedProducts = [
+      { cat: "cat-29", name: "Hotmail Fresh Account", desc: "Freshly created, verified Hotmail account.", usdt: 0.35, bdt: 40, stock: 1240 },
+      { cat: "cat-29", name: "Outlook Aged Account", desc: "Aged Outlook account with high trust score.", usdt: 0.8, bdt: 92, stock: 560 },
+      { cat: "cat-46", name: "Custom Domain Outlook", desc: "Outlook on your own custom domain.", usdt: 1.5, bdt: 172, stock: 210 },
+      { cat: "cat-43", name: "Premium VPN - 1 Month", desc: "High speed VPN, multiple locations.", usdt: 2.5, bdt: 285, stock: 430 },
+      { cat: "cat-48", name: "Residential Proxy 1 GB", desc: "Rotating residential proxy, 1 GB data.", usdt: 1.2, bdt: 138, stock: 890 },
+      { cat: "cat-48", name: "Residential Proxy 10 GB", desc: "Rotating residential proxy, 10 GB data.", usdt: 9.5, bdt: 1090, stock: 320 },
+      { cat: "cat-49", name: "Gmail Edu Mail 0-1 Days", desc: "Fresh edu Gmail, 0-1 days old.", usdt: 3.0, bdt: 345, stock: 150 },
+      { cat: "cat-50", name: "Gmail Edu Mail 1 Day", desc: "Edu Gmail, exactly 1 day aged.", usdt: 3.2, bdt: 368, stock: 120 },
+      { cat: "cat-51", name: "Edu Mail 3-7 Days", desc: "Edu mail aged 3 to 7 days.", usdt: 4.5, bdt: 517, stock: 80 },
+      { cat: "cat-52", name: "Edu Mail 15-30 Days", desc: "Premium aged edu mail, 15-30 days.", usdt: 7.0, bdt: 805, stock: 45 }
     ];
 
-    var state = { currency: "USDT", filter: "all" };
+    // ---- Firebase init (graceful fallback if config not set) ----
+    let db = null, auth = null, firebaseReady = false;
+    const configPlaceholder = firebaseConfig.apiKey.indexOf("PASTE_") === 0;
+    if (!configPlaceholder) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        firebaseReady = true;
+      } catch (e) {
+        console.log("[v0] Firebase init failed:", e.message);
+      }
+    }
+
+    // ---- App state ----
+    const state = { currency: "USDT", filter: "all" };
+    let products = []; // live list, each item: { id, cat, name, desc, usdt, bdt, stock }
+
+    function escapeHtml(str) {
+      return String(str == null ? "" : str)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
 
     function formatPrice(p) {
-      if (state.currency === "USDT") return "$" + p.usdt.toFixed(2) + " USDT";
-      return "\u09F3" + p.bdt + " BDT";
+      if (state.currency === "USDT") return "$" + Number(p.usdt).toFixed(2) + " USDT";
+      return "\u09F3" + Number(p.bdt) + " BDT";
+    }
+
+    function catTitle(id) {
+      const c = categories.filter(function (x) { return x.id === id; })[0];
+      return c ? c.title : id;
     }
 
     // ---- Render category grid ----
     function renderCategories() {
-      var grid = document.getElementById("category-grid");
+      const grid = document.getElementById("category-grid");
       grid.innerHTML = categories.map(function (c) {
-        var badge = c.badge
+        const badge = c.badge
           ? '<span class="absolute -top-2.5 right-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full shadow-sm badge-pop uppercase">' + c.badge + '</span>'
           : '';
         return '' +
           '<button class="filter-btn rounded-[1.25rem] p-3 sm:p-4 flex items-center gap-3 relative text-left" data-filter="' + c.id + '">' +
             '<div class="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center font-black text-indigo-500 heading-font">' + c.icon + '</div>' +
-            '<span class="cat-title-text font-black text-slate-800 text-[11px] sm:text-sm leading-tight pr-2">' + c.title + '</span>' +
+            '<span class="cat-title-text font-black text-slate-800 text-[11px] sm:text-sm leading-tight pr-2">' + escapeHtml(c.title) + '</span>' +
             badge +
           '</button>';
       }).join("");
     }
 
-    // ---- Render products ----
+    // ---- Render storefront products ----
     function renderProducts() {
-      var grid = document.getElementById("product-grid");
+      const grid = document.getElementById("product-grid");
       grid.innerHTML = products.map(function (p) {
         return '' +
           '<div class="product-item bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300" data-cat="' + p.cat + '">' +
             '<div class="flex items-start justify-between mb-3">' +
-              '<div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black heading-font">' + p.name.charAt(0) + '</div>' +
-              '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">' + p.stock + ' in stock</span>' +
+              '<div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black heading-font">' + escapeHtml(p.name.charAt(0)) + '</div>' +
+              '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">' + escapeHtml(p.stock) + ' in stock</span>' +
             '</div>' +
-            '<h3 class="heading-font font-black text-slate-900 text-base leading-tight mb-1">' + p.name + '</h3>' +
-            '<p class="text-slate-500 text-xs font-medium mb-4 leading-relaxed">' + p.desc + '</p>' +
+            '<h3 class="heading-font font-black text-slate-900 text-base leading-tight mb-1">' + escapeHtml(p.name) + '</h3>' +
+            '<p class="text-slate-500 text-xs font-medium mb-4 leading-relaxed">' + escapeHtml(p.desc) + '</p>' +
             '<div class="flex items-center justify-between pt-3 border-t border-slate-100">' +
               '<span class="price-tag heading-font font-black text-indigo-600 text-lg" data-id="' + p.id + '">' + formatPrice(p) + '</span>' +
               '<button class="bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors active:scale-95">Buy Now</button>' +
             '</div>' +
           '</div>';
       }).join("");
+      applyFilter();
     }
 
-    // ---- Filtering ----
     function applyFilter() {
-      var items = document.querySelectorAll("#product-grid .product-item");
-      var shown = 0;
+      const items = document.querySelectorAll("#product-grid .product-item");
+      let shown = 0;
       items.forEach(function (el) {
-        var match = state.filter === "all" || el.getAttribute("data-cat") === state.filter;
+        const match = state.filter === "all" || el.getAttribute("data-cat") === state.filter;
         el.classList.toggle("hidden-product", !match);
         if (match) shown++;
       });
       document.getElementById("empty-state").classList.toggle("hidden", shown > 0);
     }
 
-    // ---- Currency ----
     function updatePrices() {
-      document.querySelectorAll(".price-tag").forEach(function (el) {
-        var id = parseInt(el.getAttribute("data-id"), 10);
-        var p = products.filter(function (x) { return x.id === id; })[0];
-        if (p) el.textContent = formatPrice(p);
-      });
+      renderProducts();
     }
 
-    // ---- Events ----
+    // ---- Storefront events ----
     document.addEventListener("click", function (e) {
-      var filterBtn = e.target.closest(".filter-btn");
+      const filterBtn = e.target.closest(".filter-btn");
       if (filterBtn) {
         document.querySelectorAll(".filter-btn").forEach(function (b) { b.classList.remove("active"); });
         filterBtn.classList.add("active");
@@ -258,12 +405,11 @@
         applyFilter();
         return;
       }
-
-      var curBtn = e.target.closest(".currency-btn");
+      const curBtn = e.target.closest(".currency-btn");
       if (curBtn) {
         state.currency = curBtn.getAttribute("data-currency");
         document.querySelectorAll(".currency-btn").forEach(function (b) {
-          var active = b.getAttribute("data-currency") === state.currency;
+          const active = b.getAttribute("data-currency") === state.currency;
           b.className = "currency-btn px-3 py-1.5 text-xs font-bold rounded-full transition-all " +
             (active ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/50" : "text-slate-500 hover:text-slate-800");
         });
@@ -271,10 +417,205 @@
       }
     });
 
+    // ---- Data source: Firestore live OR demo fallback ----
+    function startProducts() {
+      if (firebaseReady) {
+        onSnapshot(collection(db, "products"), function (snap) {
+          products = snap.docs.map(function (d) {
+            const data = d.data();
+            return {
+              id: d.id, cat: data.cat, name: data.name, desc: data.desc || "",
+              usdt: Number(data.usdt) || 0, bdt: Number(data.bdt) || 0, stock: Number(data.stock) || 0
+            };
+          });
+          // stable order by name
+          products.sort(function (a, b) { return a.name.localeCompare(b.name); });
+          renderProducts();
+          renderAdminList();
+        }, function (err) {
+          console.log("[v0] Firestore read failed:", err.message);
+        });
+      } else {
+        products = seedProducts.map(function (p, i) { return Object.assign({ id: "demo-" + i }, p); });
+        renderProducts();
+        renderAdminList();
+      }
+    }
+
+    /* ============================================================
+       ADMIN PANEL
+       ============================================================ */
+    const overlay = document.getElementById("admin-overlay");
+    const loginView = document.getElementById("admin-login");
+    const dashView = document.getElementById("admin-dashboard");
+    const statusEl = document.getElementById("admin-status");
+
+    function openAdmin() {
+      overlay.classList.remove("hidden");
+      document.getElementById("config-warning").classList.toggle("hidden", firebaseReady);
+      if (!firebaseReady) {
+        // No backend: show dashboard read-only-ish with demo data
+        loginView.classList.add("hidden");
+        dashView.classList.remove("hidden");
+        statusEl.textContent = "Demo mode (no Firebase config)";
+      }
+    }
+    function closeAdmin() { overlay.classList.add("hidden"); }
+
+    document.getElementById("admin-open").addEventListener("click", openAdmin);
+    document.getElementById("admin-close").addEventListener("click", closeAdmin);
+    overlay.addEventListener("click", function (e) { if (e.target === overlay) closeAdmin(); });
+
+    // populate category select
+    function fillCategorySelect() {
+      const sel = document.getElementById("p-cat");
+      sel.innerHTML = categories.map(function (c) {
+        return '<option value="' + c.id + '">' + escapeHtml(c.title) + '</option>';
+      }).join("");
+    }
+    fillCategorySelect();
+
+    // ---- Auth ----
+    if (firebaseReady) {
+      onAuthStateChanged(auth, function (user) {
+        if (user) {
+          loginView.classList.add("hidden");
+          dashView.classList.remove("hidden");
+          statusEl.textContent = "Signed in as " + user.email;
+        } else {
+          loginView.classList.remove("hidden");
+          dashView.classList.add("hidden");
+          statusEl.textContent = "Not signed in";
+        }
+      });
+    }
+
+    document.getElementById("login-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const err = document.getElementById("login-error");
+      err.classList.add("hidden");
+      if (!firebaseReady) { err.textContent = "Firebase config যোগ করা হয়নি।"; err.classList.remove("hidden"); return; }
+      const email = document.getElementById("login-email").value.trim();
+      const pass = document.getElementById("login-password").value;
+      signInWithEmailAndPassword(auth, email, pass).catch(function (e2) {
+        err.textContent = "Login failed: " + e2.code;
+        err.classList.remove("hidden");
+      });
+    });
+
+    document.getElementById("logout-btn").addEventListener("click", function () {
+      if (firebaseReady) signOut(auth);
+    });
+
+    // ---- Product form (add / edit) ----
+    const form = document.getElementById("product-form");
+    const formTitle = document.getElementById("form-title");
+    const formReset = document.getElementById("form-reset");
+
+    function resetForm() {
+      form.reset();
+      document.getElementById("p-id").value = "";
+      formTitle.textContent = "Add New Product";
+      formReset.classList.add("hidden");
+    }
+    formReset.addEventListener("click", resetForm);
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      if (!firebaseReady) { alert("Firebase config যোগ করলে তবেই product save হবে।"); return; }
+      const id = document.getElementById("p-id").value;
+      const payload = {
+        cat: document.getElementById("p-cat").value,
+        name: document.getElementById("p-name").value.trim(),
+        desc: document.getElementById("p-desc").value.trim(),
+        usdt: Number(document.getElementById("p-usdt").value),
+        bdt: Number(document.getElementById("p-bdt").value),
+        stock: Number(document.getElementById("p-stock").value)
+      };
+      try {
+        if (id) {
+          await updateDoc(doc(db, "products", id), payload);
+        } else {
+          await addDoc(collection(db, "products"), payload);
+        }
+        resetForm();
+      } catch (e2) {
+        alert("Save failed: " + e2.message);
+      }
+    });
+
+    // ---- Admin product list ----
+    function renderAdminList() {
+      const list = document.getElementById("admin-product-list");
+      const countEl = document.getElementById("admin-count");
+      if (countEl) countEl.textContent = products.length;
+      if (!list) return;
+      if (!products.length) {
+        list.innerHTML = '<p class="text-sm text-slate-400 font-semibold py-4 text-center">No products yet.</p>';
+        return;
+      }
+      list.innerHTML = products.map(function (p) {
+        return '' +
+          '<div class="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3">' +
+            '<div class="flex-1 min-w-0">' +
+              '<p class="font-bold text-slate-900 text-sm truncate">' + escapeHtml(p.name) + '</p>' +
+              '<p class="text-[11px] text-slate-400 font-semibold truncate">' + escapeHtml(catTitle(p.cat)) + ' · $' + Number(p.usdt).toFixed(2) + ' / \u09F3' + Number(p.bdt) + ' · ' + escapeHtml(p.stock) + ' stock</p>' +
+            '</div>' +
+            '<button data-edit="' + p.id + '" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 px-2 py-1">Edit</button>' +
+            '<button data-del="' + p.id + '" class="text-xs font-bold text-rose-500 hover:text-rose-600 px-2 py-1">Delete</button>' +
+          '</div>';
+      }).join("");
+    }
+
+    document.getElementById("admin-product-list").addEventListener("click", async function (e) {
+      const editId = e.target.getAttribute && e.target.getAttribute("data-edit");
+      const delId = e.target.getAttribute && e.target.getAttribute("data-del");
+
+      if (editId) {
+        const p = products.filter(function (x) { return x.id === editId; })[0];
+        if (!p) return;
+        document.getElementById("p-id").value = p.id;
+        document.getElementById("p-cat").value = p.cat;
+        document.getElementById("p-name").value = p.name;
+        document.getElementById("p-desc").value = p.desc;
+        document.getElementById("p-usdt").value = p.usdt;
+        document.getElementById("p-bdt").value = p.bdt;
+        document.getElementById("p-stock").value = p.stock;
+        formTitle.textContent = "Edit Product";
+        formReset.classList.remove("hidden");
+        dashView.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      if (delId) {
+        if (!firebaseReady) { alert("Firebase config যোগ করলে তবেই delete হবে।"); return; }
+        if (!confirm("এই product-টি delete করবে?")) return;
+        try { await deleteDoc(doc(db, "products", delId)); }
+        catch (e2) { alert("Delete failed: " + e2.message); }
+      }
+    });
+
+    // ---- Import demo products into Firestore ----
+    document.getElementById("seed-btn").addEventListener("click", async function () {
+      if (!firebaseReady) { alert("Firebase config যোগ করলে তবেই import হবে।"); return; }
+      if (!confirm(seedProducts.length + " টি demo product Firestore-এ যোগ করবে?")) return;
+      try {
+        const existing = await getDocs(collection(db, "products"));
+        const batch = writeBatch(db);
+        seedProducts.forEach(function (p) {
+          const ref = doc(collection(db, "products"));
+          batch.set(ref, p);
+        });
+        await batch.commit();
+        alert("Demo products imported. মোট এখন: " + (existing.size + seedProducts.length));
+      } catch (e2) {
+        alert("Import failed: " + e2.message);
+      }
+    });
+
     // ---- Init ----
     renderCategories();
-    renderProducts();
-    applyFilter();
+    startProducts();
   </script>
 </body>
 </html>

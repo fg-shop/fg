@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SorveX Mail | Premium Digital Services</title>
+  <meta name="description" content="SorveX Mail - Premium digital assets with instant automated delivery and 24/7 support." />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding-bottom: 70px;
+      padding-top: 100px;
+    }
+    .heading-font { font-family: 'Outfit', sans-serif; }
+
+    .floating-header {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,1);
+    }
+
+    @keyframes marquee {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+    .animate-marquee { animation: marquee 25s linear infinite; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .product-item { animation: fadeUp 0.5s ease forwards; }
+    .hidden-product { display: none !important; }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .badge-pop { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+    /* Filter buttons */
+    .filter-btn { transition: all 0.2s ease-in-out; cursor: pointer; }
+
+    button[data-filter="all"].filter-btn {
+      background-color: #ffffff; color: #0f172a; border: 1px solid #e2e8f0;
+    }
+    button[data-filter="all"].filter-btn:hover { background-color: #f8fafc; }
+    button[data-filter="all"].filter-btn.active {
+      background-color: #4f46e5; color: #ffffff !important; border-color: #4f46e5;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    }
+
+    button[data-filter^="cat-"].filter-btn {
+      background-color: #ffffff; border: 2px solid transparent; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    button[data-filter^="cat-"].filter-btn:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+    button[data-filter^="cat-"].filter-btn.active {
+      border-color: #4f46e5; background-color: #f8fafc; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.15);
+    }
+    button[data-filter^="cat-"].filter-btn.active .cat-title-text { color: #4f46e5; }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Floating Header -->
+  <div class="fixed top-3 left-3 right-3 md:top-5 md:left-1/2 md:-translate-x-1/2 md:w-[calc(100%-2.5rem)] max-w-7xl z-[100]">
+    <header class="floating-header border border-white/60 rounded-[2rem] w-full transition-all duration-300">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 md:h-20">
+
+          <!-- Logo -->
+          <div class="flex items-center">
+            <a href="index.html" class="flex items-center gap-2 sm:gap-3 group">
+              <span class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-lg heading-font shadow-md group-hover:scale-105 transition-transform">S</span>
+              <span class="heading-font font-black text-lg sm:text-xl text-slate-900 tracking-tight">SorveX Mail</span>
+            </a>
+          </div>
+
+          <!-- Right actions -->
+          <div class="flex items-center gap-2 sm:gap-4">
+            <!-- Currency switcher -->
+            <div class="flex items-center bg-slate-200/50 p-1 rounded-full border border-slate-200/60 shrink-0 backdrop-blur-sm">
+              <button data-currency="USDT" class="currency-btn px-3 py-1.5 text-xs font-bold rounded-full transition-all bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/50">USDT</button>
+              <button data-currency="BDT" class="currency-btn px-3 py-1.5 text-xs font-bold rounded-full transition-all text-slate-500 hover:text-slate-800">BDT</button>
+            </div>
+
+            <!-- Guest actions -->
+            <div class="flex items-center gap-1.5 sm:gap-3">
+              <a href="login.html" class="text-xs sm:text-sm font-bold text-slate-600 hover:text-indigo-600 px-2 sm:px-3 py-2 transition-colors">Log In</a>
+              <a href="register.html" class="bg-slate-900 hover:bg-indigo-600 text-white px-3.5 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 shadow-md hover:shadow-indigo-500/30 active:scale-95 flex items-center">
+                <span class="hidden sm:inline">Get Started</span>
+                <span class="sm:hidden">Sign Up</span>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12 min-h-screen relative overflow-hidden">
+
+    <!-- Ambient glow -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+      <div class="absolute -top-32 -right-32 w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full blur-[120px]"></div>
+      <div class="absolute top-1/2 -left-32 w-[25rem] h-[25rem] bg-purple-500/10 rounded-full blur-[100px]"></div>
+    </div>
+
+    <!-- Flash news -->
+    <div class="relative w-full max-w-4xl mx-auto bg-white/80 backdrop-blur-md rounded-full p-1.5 flex items-center mb-10 sm:mb-16 shadow-sm border border-slate-200 z-10">
+      <div class="relative z-10 flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full text-white text-[10px] sm:text-xs font-black uppercase tracking-widest shrink-0 shadow-md">
+        <span class="relative flex h-2 w-2 mr-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+        </span>
+        Update
+      </div>
+      <div class="flex-1 overflow-hidden flex items-center relative" style="mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);">
+        <div class="whitespace-nowrap animate-marquee pl-[100%] text-slate-600 font-semibold text-xs sm:text-sm flex items-center tracking-wide">
+          Welcome to SORVEX MAIL! Premium digital assets available now. <span class="text-indigo-400 mx-3">&#9679;</span> Instant automated delivery! <span class="text-indigo-400 mx-3">&#9679;</span> 24/7 Support.
+        </div>
+      </div>
+    </div>
+
+    <!-- Heading -->
+    <div class="mb-10 sm:mb-14 text-center relative z-10">
+      <h2 class="heading-font text-4xl sm:text-5xl md:text-[3.5rem] font-black text-slate-900 tracking-tight leading-[1.1] mb-4">
+        Explore Premium <br class="hidden sm:block" />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Digital Services</span>
+      </h2>
+      <p class="text-slate-500 text-sm sm:text-base font-medium max-w-2xl mx-auto px-4">
+        Select a category below to filter products instantly. We deliver excellence directly to your dashboard securely and automatically.
+      </p>
+    </div>
+
+    <!-- Category filter -->
+    <div class="relative z-10 w-full max-w-3xl mx-auto mb-10 px-1 sm:px-0">
+      <div class="flex justify-center mb-6">
+        <button class="filter-btn active px-8 py-3.5 rounded-full font-black text-[11px] sm:text-[13px] tracking-wide" data-filter="all">ALL ITEMS</button>
+      </div>
+      <div id="category-grid" class="grid grid-cols-2 gap-3 sm:gap-4"></div>
+    </div>
+
+    <!-- Products -->
+    <div id="product-grid" class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto"></div>
+    <p id="empty-state" class="hidden text-center text-slate-400 font-semibold py-16">No products found in this category.</p>
+
+  </main>
+
+  <script>
+    // ---- Data ----
+    var categories = [
+      { id: "cat-29", title: "Microsoft Hotmail & Outlook", badge: "POPULAR", icon: "M" },
+      { id: "cat-46", title: "Outlook Domain / Different Type Domain", badge: null, icon: "O" },
+      { id: "cat-43", title: "VPN Of Different Type", badge: null, icon: "V" },
+      { id: "cat-48", title: "Proxy Of 1 GB And 10 GB", badge: "HOT", icon: "P" },
+      { id: "cat-49", title: "Gmail Edu Mail 0-1 Days", badge: null, icon: "G" },
+      { id: "cat-50", title: "Gmail Edu Mail 1 Days", badge: null, icon: "G" },
+      { id: "cat-51", title: "Edu Mail Of 3 And 7 Days", badge: null, icon: "E" },
+      { id: "cat-52", title: "Edu Mail Of 15 And 30 Days", badge: null, icon: "E" }
+    ];
+
+    var products = [
+      { id: 1, cat: "cat-29", name: "Hotmail Fresh Account", desc: "Freshly created, verified Hotmail account.", usdt: 0.35, bdt: 40, stock: 1240 },
+      { id: 2, cat: "cat-29", name: "Outlook Aged Account", desc: "Aged Outlook account with high trust score.", usdt: 0.8, bdt: 92, stock: 560 },
+      { id: 3, cat: "cat-46", name: "Custom Domain Outlook", desc: "Outlook on your own custom domain.", usdt: 1.5, bdt: 172, stock: 210 },
+      { id: 4, cat: "cat-43", name: "Premium VPN - 1 Month", desc: "High speed VPN, multiple locations.", usdt: 2.5, bdt: 285, stock: 430 },
+      { id: 5, cat: "cat-48", name: "Residential Proxy 1 GB", desc: "Rotating residential proxy, 1 GB data.", usdt: 1.2, bdt: 138, stock: 890 },
+      { id: 6, cat: "cat-48", name: "Residential Proxy 10 GB", desc: "Rotating residential proxy, 10 GB data.", usdt: 9.5, bdt: 1090, stock: 320 },
+      { id: 7, cat: "cat-49", name: "Gmail Edu Mail 0-1 Days", desc: "Fresh edu Gmail, 0-1 days old.", usdt: 3.0, bdt: 345, stock: 150 },
+      { id: 8, cat: "cat-50", name: "Gmail Edu Mail 1 Day", desc: "Edu Gmail, exactly 1 day aged.", usdt: 3.2, bdt: 368, stock: 120 },
+      { id: 9, cat: "cat-51", name: "Edu Mail 3-7 Days", desc: "Edu mail aged 3 to 7 days.", usdt: 4.5, bdt: 517, stock: 80 },
+      { id: 10, cat: "cat-52", name: "Edu Mail 15-30 Days", desc: "Premium aged edu mail, 15-30 days.", usdt: 7.0, bdt: 805, stock: 45 }
+    ];
+
+    var state = { currency: "USDT", filter: "all" };
+
+    function formatPrice(p) {
+      if (state.currency === "USDT") return "$" + p.usdt.toFixed(2) + " USDT";
+      return "\u09F3" + p.bdt + " BDT";
+    }
+
+    // ---- Render category grid ----
+    function renderCategories() {
+      var grid = document.getElementById("category-grid");
+      grid.innerHTML = categories.map(function (c) {
+        var badge = c.badge
+          ? '<span class="absolute -top-2.5 right-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[8px] font-black px-2 py-0.5 rounded-full shadow-sm badge-pop uppercase">' + c.badge + '</span>'
+          : '';
+        return '' +
+          '<button class="filter-btn rounded-[1.25rem] p-3 sm:p-4 flex items-center gap-3 relative text-left" data-filter="' + c.id + '">' +
+            '<div class="w-10 h-10 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center font-black text-indigo-500 heading-font">' + c.icon + '</div>' +
+            '<span class="cat-title-text font-black text-slate-800 text-[11px] sm:text-sm leading-tight pr-2">' + c.title + '</span>' +
+            badge +
+          '</button>';
+      }).join("");
+    }
+
+    // ---- Render products ----
+    function renderProducts() {
+      var grid = document.getElementById("product-grid");
+      grid.innerHTML = products.map(function (p) {
+        return '' +
+          '<div class="product-item bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300" data-cat="' + p.cat + '">' +
+            '<div class="flex items-start justify-between mb-3">' +
+              '<div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black heading-font">' + p.name.charAt(0) + '</div>' +
+              '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">' + p.stock + ' in stock</span>' +
+            '</div>' +
+            '<h3 class="heading-font font-black text-slate-900 text-base leading-tight mb-1">' + p.name + '</h3>' +
+            '<p class="text-slate-500 text-xs font-medium mb-4 leading-relaxed">' + p.desc + '</p>' +
+            '<div class="flex items-center justify-between pt-3 border-t border-slate-100">' +
+              '<span class="price-tag heading-font font-black text-indigo-600 text-lg" data-id="' + p.id + '">' + formatPrice(p) + '</span>' +
+              '<button class="bg-slate-900 hover:bg-indigo-600 text-white text-xs font-bold px-4 py-2 rounded-full transition-colors active:scale-95">Buy Now</button>' +
+            '</div>' +
+          '</div>';
+      }).join("");
+    }
+
+    // ---- Filtering ----
+    function applyFilter() {
+      var items = document.querySelectorAll("#product-grid .product-item");
+      var shown = 0;
+      items.forEach(function (el) {
+        var match = state.filter === "all" || el.getAttribute("data-cat") === state.filter;
+        el.classList.toggle("hidden-product", !match);
+        if (match) shown++;
+      });
+      document.getElementById("empty-state").classList.toggle("hidden", shown > 0);
+    }
+
+    // ---- Currency ----
+    function updatePrices() {
+      document.querySelectorAll(".price-tag").forEach(function (el) {
+        var id = parseInt(el.getAttribute("data-id"), 10);
+        var p = products.filter(function (x) { return x.id === id; })[0];
+        if (p) el.textContent = formatPrice(p);
+      });
+    }
+
+    // ---- Events ----
+    document.addEventListener("click", function (e) {
+      var filterBtn = e.target.closest(".filter-btn");
+      if (filterBtn) {
+        document.querySelectorAll(".filter-btn").forEach(function (b) { b.classList.remove("active"); });
+        filterBtn.classList.add("active");
+        state.filter = filterBtn.getAttribute("data-filter");
+        applyFilter();
+        return;
+      }
+
+      var curBtn = e.target.closest(".currency-btn");
+      if (curBtn) {
+        state.currency = curBtn.getAttribute("data-currency");
+        document.querySelectorAll(".currency-btn").forEach(function (b) {
+          var active = b.getAttribute("data-currency") === state.currency;
+          b.className = "currency-btn px-3 py-1.5 text-xs font-bold rounded-full transition-all " +
+            (active ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/50" : "text-slate-500 hover:text-slate-800");
+        });
+        updatePrices();
+      }
+    });
+
+    // ---- Init ----
+    renderCategories();
+    renderProducts();
+    applyFilter();
+  </script>
+</body>
+</html>
